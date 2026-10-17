@@ -263,10 +263,62 @@
 
         window.wasmBindings = bindings;
         window.dispatchEvent(new CustomEvent("TrunkApplicationStarted", { detail: { wasm } }));
+
+        waitForAppAndOpen();
       } catch (err) {
         console.error('Corel Web startup error:', err);
         showError(err);
       }
+    }
+
+    async function openDefaultDocument() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('new')) return; // ?new otwiera pusty edytor
+
+      const fileUrl = params.get('file') || './zawiercie_logo.cdr';
+      const fileName = fileUrl.split('/').pop() || 'zawiercie_logo.cdr';
+
+      try {
+        const res = await fetch(fileUrl);
+        if (!res.ok) {
+          console.warn(`Nie można pobrać pliku startowego ${fileUrl}: ${res.status}`);
+          return;
+        }
+        const blob = await res.blob();
+        const file = new File([blob], fileName, { type: 'application/octet-stream' });
+        const dt = new DataTransfer();
+        dt.items.add(file);
+
+        const canvas = document.getElementById('vectorcraft_canvas');
+        if (!canvas) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const dropEvent = new DragEvent('drop', {
+          bubbles: true,
+          cancelable: true,
+          dataTransfer: dt,
+          clientX: rect.left + rect.width / 2,
+          clientY: rect.top + rect.height / 2
+        });
+        canvas.dispatchEvent(dropEvent);
+        console.log(`Domyślny plik ${fileName} został pomyślnie otwarty w edytorze.`);
+      } catch (err) {
+        console.warn('Błąd otwierania domyślnego pliku CDR:', err);
+      }
+    }
+
+    function waitForAppAndOpen() {
+      if (!document.getElementById('vectorcraft_loading')) {
+        setTimeout(openDefaultDocument, 200);
+        return;
+      }
+      const observer = new MutationObserver(() => {
+        if (!document.getElementById('vectorcraft_loading')) {
+          observer.disconnect();
+          setTimeout(openDefaultDocument, 200);
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
     }
 
     start();
