@@ -271,6 +271,23 @@
       }
     }
 
+    async function fetchWithCorsFallback(fileUrl) {
+      try {
+        const res = await fetch(fileUrl);
+        if (res.ok) return res;
+      } catch (directErr) {
+        // Jeśli bezpośredni fetch został zablokowany przez CORS (np. pCloud / filedn.eu),
+        // ponawiamy pobranie przez własne proxy CORS na lmk.one
+        if (/^https?:\/\//i.test(fileUrl)) {
+          console.info(`Bezpośredni odczyt ${fileUrl} zablokowany przez CORS, próba przez proxy lmk.one...`);
+          const proxyUrl = `https://lmk.one/api/cors?url=${encodeURIComponent(fileUrl)}`;
+          return await fetch(proxyUrl);
+        }
+        throw directErr;
+      }
+      return await fetch(fileUrl);
+    }
+
     async function openDefaultDocument() {
       const params = new URLSearchParams(window.location.search);
       if (params.has('new')) return; // ?new otwiera pusty edytor
@@ -280,7 +297,7 @@
       const fileName = decodeURIComponent(rawName) || 'plik.cdr';
 
       try {
-        const res = await fetch(fileUrl);
+        const res = await fetchWithCorsFallback(fileUrl);
         if (!res.ok) {
           console.warn(`Nie można pobrać pliku startowego ${fileUrl}: ${res.status}`);
           return;
