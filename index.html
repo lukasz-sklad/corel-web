@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Corel Web — VectorCraft</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  
+<script type="module">
+import init, * as bindings from './vectorcraft-web-176190d24f086382.js';
+const wasm = await init({ module_or_path: './vectorcraft-web-176190d24f086382_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626; }
+    #vectorcraft_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #vectorcraft_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
+  </style>
+<link rel="modulepreload" href="./vectorcraft-web-176190d24f086382.js" crossorigin="anonymous" integrity="sha384-5gXf/NCKGC3Wd6G+SjPFju3Lxja8R12KjqWsvfqhvMeYQWBJaT+Tjc/SjMcRyhxa"><link rel="preload" href="./vectorcraft-web-176190d24f086382_bg.wasm" crossorigin="anonymous" integrity="sha384-k/T4kANR4baL8DvjkL27Xvy894htmqHWzU9uf2Mjh0ZkKtakAKtsXjixFjM9h9hi" as="fetch" type="application/wasm"></head>
+<body>
+  <canvas id="vectorcraft_canvas"></canvas>
+  <div id="vectorcraft_loading">Ładowanie Corel Web&hellip;</div>
+</body>
+</html>
