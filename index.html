@@ -276,7 +276,8 @@
       if (params.has('new')) return; // ?new otwiera pusty edytor
 
       const fileUrl = params.get('file') || './zawiercie_logo.cdr';
-      const fileName = fileUrl.split('/').pop() || 'zawiercie_logo.cdr';
+      const rawName = (fileUrl.split('/').pop() || 'zawiercie_logo.cdr').split('?')[0].split('#')[0];
+      const fileName = decodeURIComponent(rawName) || 'plik.cdr';
 
       try {
         const res = await fetch(fileUrl);
