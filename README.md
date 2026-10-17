@@ -19,6 +19,13 @@ Aplikacja jest dostępna publicznie pod adresami:
 - Kopia GitHub Pages: **[https://lukasz-sklad.github.io/corel-web/](https://lukasz-sklad.github.io/corel-web/)**
 - Przekierowanie z bloga: **[https://lmk.one/corel](https://lmk.one/corel)**
 
+## Parametry URL
+
+- **Domyślnie:** [https://corel.lmk.one/](https://corel.lmk.one/) – otwiera plik z logo Zawiercia.
+- **Czysty edytor:** [https://corel.lmk.one/?new](https://corel.lmk.one/?new) – otwiera aplikację bez domyślnego pliku.
+- **Dowolny inny plik z sieci:** [https://corel.lmk.one/?file=adres_do_pliku.cdr](https://corel.lmk.one/?file=adres_do_pliku.cdr) – pozwala otworzyć inny plik bezpośrednio z adresu URL.
+- **Tryb zgodności WebGL2:** [https://corel.lmk.one/?webgl](https://corel.lmk.one/?webgl) – wymusza backend WebGL2 w razie problemów z WebGPU.
+
 ## Architektura i hosting
 
 - **Silnik:** Rust `wasm32-unknown-unknown`, zoptymalizowany pod kątem minimalnego rozmiaru i maksymalnej wydajności za pomocą `wasm-opt -Oz`.
