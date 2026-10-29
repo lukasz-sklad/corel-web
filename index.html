@@ -356,9 +356,9 @@
     // Automatyczne otwarcie domyślnego dokumentu (Zawiercia.cdr / zawiercie_logo.cdr) lub pliku z ?file=
     async function openDefaultDocument() {
       const params = new URLSearchParams(window.location.search);
-      if (params.has('new')) return; // ?new otwiera czysty edytor
+      if (params.has('new') || params.has('empty')) return; // ?new lub ?empty otwiera czysty edytor
 
-      const fileUrl = params.get('file') || './zawiercie_logo.cdr';
+      const fileUrl = params.get('file') || params.get('url') || './zawiercie_logo.cdr';
       const cleanUrl = fileUrl.split('?')[0].split('#')[0];
       const rawName = cleanUrl.split('/').pop() || 'zawiercie_logo.cdr';
       const fileName = decodeURIComponent(rawName) || 'projekt.cdr';
